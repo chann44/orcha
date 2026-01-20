@@ -1,7 +1,7 @@
 # OrchaProtocol Specification
 
 ```
-RFC: AGENTFEED-001
+RFC: Orcha-001
 Title: OrchaProtocol Specification v1.0
 Status: Draft
 Category: Standards Track
@@ -14,7 +14,7 @@ Updated: 2025-01-21
 
 ## Abstract
 
-This document specifies AgentFeed, an open protocol for publishing and consuming structured data feeds optimized for AI agent consumption. Orchadefines a standard event format, semantic metadata schema, licensing framework, and transport mechanisms that enable AI agents to discover, subscribe to, and legally consume data from diverse sources.
+This document specifies Orcha, an open protocol for publishing and consuming structured data feeds optimized for AI agent consumption. Orchadefines a standard event format, semantic metadata schema, licensing framework, and transport mechanisms that enable AI agents to discover, subscribe to, and legally consume data from diverse sources.
 
 The protocol addresses three key challenges in the emerging AI agent ecosystem: (1) lack of standardized, machine-optimized data formats, (2) absence of clear content licensing mechanisms for AI consumption, and (3) no unified discovery and subscription model for agent data sources.
 
@@ -183,7 +183,7 @@ Every Orchaevent MUST include the following fields:
 
 ```json
 {
-  "agentfeed_version": "1.0",
+  "orcha_version": "1.0",
   "event_id": "<uuid>",
   "feed_id": "<string>",
   "published_at": "<iso8601-datetime>",
@@ -196,9 +196,9 @@ Every Orchaevent MUST include the following fields:
 
 ```json
 {
-  "$schema": "https://agentfeed.io/schema/event/v1.0",
+  "$schema": "https://orcha.io/schema/event/v1.0",
   
-  "agentfeed_version": "1.0",
+  "orcha_version": "1.0",
   
   "event_id": "019abc12-3def-7890-abcd-ef1234567890",
   
@@ -233,7 +233,7 @@ Every Orchaevent MUST include the following fields:
         "type": "company",
         "role": "subject",
         "identifiers": {
-          "agentfeed": "ent_stripe_inc",
+          "orcha": "ent_stripe_inc",
           "crunchbase": "stripe",
           "linkedin": "company/stripe"
         },
@@ -248,7 +248,7 @@ Every Orchaevent MUST include the following fields:
         "type": "investor",
         "role": "lead_investor",
         "identifiers": {
-          "agentfeed": "ent_sequoia",
+          "orcha": "ent_sequoia",
           "crunchbase": "sequoia-capital"
         }
       }
@@ -322,7 +322,7 @@ Every Orchaevent MUST include the following fields:
     },
     "requirements": {
       "attribution": true,
-      "attribution_format": "Source: TechCrunch via AgentFeed",
+      "attribution_format": "Source: TechCrunch via Orcha",
       "usage_reporting": true
     },
     "restrictions": {
@@ -334,7 +334,7 @@ Every Orchaevent MUST include the following fields:
       "model": "per_event",
       "base_price_cents": 10
     },
-    "terms_url": "https://agentfeed.io/licenses/lic_tc_commercial_v2",
+    "terms_url": "https://orcha.io/licenses/lic_tc_commercial_v2",
     "terms_hash": "sha256:def456..."
   },
   
@@ -364,10 +364,10 @@ Every Orchaevent MUST include the following fields:
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `agentfeed_version` | string | REQUIRED | Protocol version. MUST be "1.0" for this specification. |
+| `orcha_version` | string | REQUIRED | Protocol version. MUST be "1.0" for this specification. |
 | `event_id` | string | REQUIRED | Globally unique event identifier. MUST be UUID v7 (time-ordered). |
 | `feed_id` | string | REQUIRED | Identifier of the feed containing this event. |
-| `published_at` | string | REQUIRED | ISO 8601 timestamp when event was published to AgentFeed. |
+| `published_at` | string | REQUIRED | ISO 8601 timestamp when event was published to Orcha. |
 | `source` | object | RECOMMENDED | Publisher information and trust signals. |
 | `content` | object | REQUIRED | The event content (title, body, summary). |
 | `semantic` | object | RECOMMENDED | Semantic metadata and extracted information. |
@@ -500,7 +500,7 @@ Entities represent real-world objects mentioned in events.
   "type": "string (required)",
   "role": "string (optional)",
   "identifiers": {
-    "agentfeed": "string (optional)",
+    "orcha": "string (optional)",
     "crunchbase": "string (optional)",
     "linkedin": "string (optional)",
     "wikipedia": "string (optional)",
@@ -807,7 +807,7 @@ For unlimited enterprise use with custom terms.
 
 5. Consumer can now access events
    GET /feeds/{feed_id}/events
-   Header: X-AgentFeed-Agreement: {agreement_id}
+   Header: X-Orcha-Agreement: {agreement_id}
 ```
 
 ---
@@ -837,7 +837,7 @@ Authorization: Bearer {api_key}
 Or via header:
 
 ```
-X-AgentFeed-API-Key: {api_key}
+X-Orcha-API-Key: {api_key}
 ```
 
 #### 7.2.3 Common Headers
@@ -847,7 +847,7 @@ Request headers:
 | Header | Description |
 |--------|-------------|
 | `Authorization` | API key authentication |
-| `X-AgentFeed-Agreement` | License agreement ID |
+| `X-Orcha-Agreement` | License agreement ID |
 | `Accept` | Response format (application/json) |
 | `X-Request-ID` | Client-generated request ID for tracing |
 
@@ -855,11 +855,11 @@ Response headers:
 
 | Header | Description |
 |--------|-------------|
-| `X-AgentFeed-Request-ID` | Server request ID |
-| `X-AgentFeed-License` | Applicable license ID |
-| `X-AgentFeed-Cost-Cents` | Cost of this request |
-| `X-AgentFeed-Rate-Limit-Remaining` | Remaining rate limit |
-| `X-AgentFeed-Rate-Limit-Reset` | Rate limit reset timestamp |
+| `X-Orcha-Request-ID` | Server request ID |
+| `X-Orcha-License` | Applicable license ID |
+| `X-Orcha-Cost-Cents` | Cost of this request |
+| `X-Orcha-Rate-Limit-Remaining` | Remaining rate limit |
+| `X-Orcha-Rate-Limit-Reset` | Rate limit reset timestamp |
 
 #### 7.2.4 Endpoints
 
@@ -1039,7 +1039,7 @@ Accept: text/event-stream
 Event format:
 
 ```
-event: agentfeed_event
+event: orcha_event
 id: {event_id}
 data: {JSON event object}
 
@@ -1056,10 +1056,10 @@ Events are delivered via HTTP POST to the registered webhook URL.
 ```
 POST {webhook_url}
 Content-Type: application/json
-X-AgentFeed-Signature: sha256={signature}
-X-AgentFeed-Event-ID: {event_id}
-X-AgentFeed-Feed-ID: {feed_id}
-X-AgentFeed-Timestamp: {timestamp}
+X-Orcha-Signature: sha256={signature}
+X-Orcha-Event-ID: {event_id}
+X-Orcha-Feed-ID: {feed_id}
+X-Orcha-Timestamp: {timestamp}
 
 {event JSON}
 ```
@@ -1333,17 +1333,17 @@ Extensions SHOULD use namespaced keys:
 This specification defines the media type:
 
 ```
-application/agentfeed+json
+application/orcha+json
 ```
 
 ### 12.2 Link Relations
 
 This specification defines link relations:
 
-- `agentfeed:feed` - Link to Orchafeed
-- `agentfeed:events` - Link to feed events
-- `agentfeed:license` - Link to license terms
-- `agentfeed:subscribe` - Link to subscription endpoint
+- `orcha:feed` - Link to Orchafeed
+- `orcha:events` - Link to feed events
+- `orcha:license` - Link to license terms
+- `orcha:subscribe` - Link to subscription endpoint
 
 ---
 
@@ -1376,7 +1376,7 @@ This specification defines link relations:
 
 ```json
 {
-  "agentfeed_version": "1.0",
+  "orcha_version": "1.0",
   "event_id": "019abc12-3def-7890-abcd-ef1234567890",
   "feed_id": "fintech-funding-rounds",
   "published_at": "2025-01-21T10:30:00Z",
@@ -1405,7 +1405,7 @@ This specification defines link relations:
         "type": "company",
         "role": "subject",
         "identifiers": {
-          "agentfeed": "ent_stripe_inc",
+          "orcha": "ent_stripe_inc",
           "crunchbase": "stripe",
           "linkedin": "company/stripe"
         },
@@ -1421,7 +1421,7 @@ This specification defines link relations:
         "type": "investor",
         "role": "lead_investor",
         "identifiers": {
-          "agentfeed": "ent_sequoia",
+          "orcha": "ent_sequoia",
           "crunchbase": "sequoia-capital"
         },
         "confidence": 0.98
@@ -1431,7 +1431,7 @@ This specification defines link relations:
         "type": "person",
         "role": "source",
         "identifiers": {
-          "agentfeed": "ent_patrick_collison",
+          "orcha": "ent_patrick_collison",
           "linkedin": "in/patrickcollison"
         },
         "attributes": {
@@ -1509,7 +1509,7 @@ This specification defines link relations:
     },
     "requirements": {
       "attribution": true,
-      "attribution_format": "Source: TechCrunch via AgentFeed",
+      "attribution_format": "Source: TechCrunch via Orcha",
       "usage_reporting": true
     },
     "restrictions": {
@@ -1522,7 +1522,7 @@ This specification defines link relations:
       "base_price_cents": 10,
       "currency": "USD"
     },
-    "terms_url": "https://agentfeed.io/licenses/lic_tc_commercial_v2",
+    "terms_url": "https://orcha.io/licenses/lic_tc_commercial_v2",
     "terms_hash": "sha256:def456789012345678901234567890abcdef123456"
   },
   "provenance": {
@@ -1551,7 +1551,7 @@ This specification defines link relations:
 The complete JSON Schema for Orchaevents is available at:
 
 ```
-https://agentfeed.io/schema/event/v1.0.json
+https://orcha.io/schema/event/v1.0.json
 ```
 
 ### Appendix C: SDK Examples
@@ -1559,12 +1559,12 @@ https://agentfeed.io/schema/event/v1.0.json
 **Go**
 
 ```go
-import "github.com/agentfeed/agentfeed-go"
+import "github.com/orcha/orcha-go"
 
-client := agentfeed.NewClient("your-api-key")
+client := orcha.NewClient("your-api-key")
 
 // Subscribe to a feed
-events, err := client.GetEvents(ctx, "fintech-funding-rounds", &agentfeed.GetEventsOptions{
+events, err := client.GetEvents(ctx, "fintech-funding-rounds", &orcha.GetEventsOptions{
     Since:         time.Now().Add(-24 * time.Hour),
     MinImportance: 0.7,
     Limit:         50,
@@ -1580,9 +1580,9 @@ for event := range stream {
 **Python**
 
 ```python
-from Orchaimport AgentFeedClient
+from orcha import OrchaClient
 
-client = AgentFeedClient("your-api-key")
+client = OrchaClient("your-api-key")
 
 # Get recent events
 events = client.get_events(
@@ -1605,9 +1605,9 @@ results = client.search(
 **TypeScript**
 
 ```typescript
-import { AgentFeedClient } from '@agentfeed/sdk';
+import { OrchaClient } from '@orcha/sdk';
 
-const client = new AgentFeedClient('your-api-key');
+const client = new OrchaClient('your-api-key');
 
 // Get events
 const events = await client.getEvents('fintech-funding-rounds', {
