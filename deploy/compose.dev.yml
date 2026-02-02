@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: orcha-postgres-dev
+    environment:
+      POSTGRES_USER: orcha
+      POSTGRES_PASSWORD: orcha
+      POSTGRES_DB: orcha
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U orcha -d orcha"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - orcha-network
+
+volumes:
+  postgres_data:
+
+networks:
+  orcha-network:
+    driver: bridge
